@@ -1,2 +1,3 @@
-# escMR
- A framework and methodology to categorize exam series.
+# escMR: Exam Series Categorization for MR Images.
+
+A framework and methodology to categorize exam series.
