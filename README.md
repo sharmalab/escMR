@@ -25,3 +25,10 @@ List of studies supported
 - MRI PITUITARY SELLA W WO CONTRAST
 - MRI RAD PLANNING BRAIN
 - MRI SPECTROSCOPY
+
+## Requirements
+- Python 3.9
+- NumPy version: 1.24.3
+- Pandas version: 2.0.2
+- scikit-learn (sklearn) version: 0.24.2
+- joblib version: 1.3.2
