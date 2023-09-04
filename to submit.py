@@ -19,15 +19,6 @@ pd.set_option('display.max_columns', None)
 pd.options.display.max_seq_items = 1500
 pd.options.display.max_rows = 1500
 
-def get_dicom_files(parent_folder):
-    for root, _, files in os.walk(parent_folder):
-        for file in files:
-            if file.lower().endswith('.dcm'):
-                file_path = os.path.join(root, file)
-                ds = pydicom.dcmread(file_path)
-                series_uid = str(ds.SeriesInstanceUID)
-                yield file_path, series_uid
-
 
 # Provide the parent folder path where DICOM files are located
 
