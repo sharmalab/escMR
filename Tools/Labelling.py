@@ -6,7 +6,7 @@ import numpy as np
 from tqdm import tqdm
 import time
 
-
+#Add tokens which can help in distinguishing the sequences
 tokens_to_search = ['T1', 'T2', 'SWI', 'GRE', 'VIBE', 'CISS', 'GRE3D', 'FLAIR', 'MPRAGE', 'DIR', 'DWI', 'ADC', 'TRACEW',
                     'MIP', 'MPR', 'LOCALIZER', 'AAHSCOUT', 'TOF', 'MRA', 'COW', 'ANT', 'ENT', 'POSTERIOR',
                     'ENTIRE''CAROTID', 'BRAVO', 'T2*', 'PROPELLER', 'SCOUT', 'DIFF', 'DIFFUSION', 'IAC', 'DTI', 'FA',
@@ -225,5 +225,70 @@ for idx in tqdm(np.arange(0, 10651), total=len(df), desc="Processing Rows"):
 
     # Add a line break for readability
     print()
+print(df)
 
 
+# List of strings to be deleted
+strings_to_delete = ['','MPR','MIP_TOF_TOF', 'MIP_SCOUT', 'FLAIR_MPR_FLAIR', 'T1_TOF', 'AAHSCOUT', 'MIP_TOF_TOF', 'MIP_SCOUT', 'FLAIR_MPR_FLAIR', 'T1_TOF', 'AAHSCOUT', 'VIBE_MIP_MRA', 'VIBE_MRA', 'TRACEW', 'TOF_ANT_TOF', 'TOF_SCOUT', 'MPR_TOF_ENT', 'RT_MRV', 'MRV_MPR', 'SUB_MIP_MRA_TOF_ENT', 'MIP_SUB_TOF_ENT', 'MIP_TOF_ENT', 'FA', 'AAHSCOUT_MPR ', 'MIP ', 'GRE ', 'T1_MIP_TOF', 'MIP_T1_MPRAGE', 'MPR_TOF', 'TOF_TOF', 'FLAIR_MPR_MPR', 'BRAVO', 'MPR_FLAIR']
+
+
+# Delete rows containing strings from the list
+df = df[~df['Calculation Result'].isin(strings_to_delete)]
+
+replacement_rules = {
+    'MIP_TOF': 'TOF_MIP',
+    'TOF_MIP_TOF': 'TOF_MIP',
+    'ANT_TOF_TOF': 'ANT_TOF',
+    'T2_SPACE_MPR': 'MPR_T2_SPACE',
+    'TOF_POSTERIOR_TOF': 'POSTERIOR_TOF',
+    'TOF_ANT': 'ANT_TOF',
+    'LT': 'LT_TOF',
+    'RT': 'RT_TOF',
+    'DTI_TRACEW': 'DTI',
+    'DTI_ADC': 'DTI',
+    'T2_FIESTA': 'FIESTA'
+
+    'ADC': 'DWI',
+    'DWI_T2' : 'DWI', 
+    'ADC_T2' : 'DWI',
+    'T1_MPR' : 'T1' ,
+    'CISS_MPR' : 'CISS',
+    'MRV_SUB' : 'MRV',
+    'SUB_TOF' : 'TOF',
+    'MRV_MIP' : 'MRV',
+    'SUB_MRA' : 'MRA', 
+    'SUB_MIP_MRA' : 'MRA',
+       'MRV_SUB_MIP' : 'MRV',
+    'MPR_T1_MPRAGE': 'T1_MPRAGE',
+    'MPR_SCOUT': 'SCOUT',
+    'FLAIR_MPR' : 'FLAIR',
+    'MPR_T2_SPACE': 'T2_SPACE',
+    'POSTERIOR_TOF': 'TOF',
+    'TOF_MIP' : 'TOF',
+  'ANT_TOF': 'TOF',
+    'TOF_ENT' : 'TOF', 
+    'SUB_TOF_ENT' : 'TOF', 
+     'SUB_TOF_MIP_ENT' : 'TOF',
+    'RT_TOF' : 'TOF', 
+    'LT_TOF' : 'TOF',
+    'TOF_MIP' : 'TOF',
+    'TOF_POSTERIOR': 'TOF',
+    'AAHSCOUT_MPR' : 'SCOUT',
+       'TOF_TOF' : 'TOF',
+    'RT_TOF_TOF':'TOF',
+    'LT_TOF_TOF': 'TOF',
+    'FIESTA_MPR': 'FIESTA',
+    'MPR_FIESTA' : 'FIESTA',
+    'MPR_DIR_SPACE': 'DIR_SPACE',
+    'T2_FIESTA': 'FIESTA',
+   'MPR_MPR_T1AGE' : 'T1_MPRAGE',
+    'MPR_T1AGE' : 'T1_MPRAGE',
+    'T1AGE' : 'T1_MPRAGE'
+}
+}
+
+# Apply the replacement rules using .replace() with regex=True
+#run it twice if needed
+
+df['Calculation Result'] = df['Calculation Result'].replace(replacement_rules, regex=True)
+df.reset_index(drop=True, inplace=True)
