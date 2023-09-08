@@ -1,9 +1,13 @@
 
+
+
+
 from tqdm import tqdm
 import re
 import joblib
 import pydicom
 import os
+
 import numpy as np
 import math
 import pandas as pd
@@ -12,12 +16,23 @@ import pydicom.multival
 pd.set_option('display.max_columns', None)
 pd.options.display.max_seq_items = 1500
 pd.options.display.max_rows = 1500
+
+
 # Provide the parent folder path where DICOM files are located
+
+
+
+
+
+
 folder_path = input("Enter the folder path: ")
 change_ext = input("Do you want to change the extension of files to .dcm? Write 'Y' for yes:")
-if change_ext == 'Y':
+if change_ext == 'Y'  :
+
+
     # Define a list of file names to delete
     file_names_to_delete = ["SECTRA", "DICOMDIR", "README.TXT", "CONTENT.XML"]
+
 
     def change_extension_recursive(folder_path, new_extension):
         for root, dirs, files in os.walk(folder_path):
@@ -114,17 +129,22 @@ df = df.drop_duplicates(subset='SeriesInstanceUID')
 df['SeriesDescription'] = df['SeriesDescription'].str.upper()
 
 df['StudyDescription'] = df['StudyDescription'].str.upper()
+
+
+
 # Assuming 'df' is the original DataFrame containing the 'StudyDescription' column
 # Reset the index to avoid any potential issues with duplicate indices
 df.reset_index(drop=True, inplace=True)
-# C:\Users\HIMANSHU GUPTA\Downloads\20230524_18824658_b2a\20230524_18824658_b2a
-# C:\Users\HIMANSHU GUPTA\Downloads\Emory data\20230503_11210021_b3a
+
 df.replace(['NaN', 'N/A'], np.nan, inplace=True)
 df['ScanOptions'].fillna('dukh', inplace=True)
 df['SequenceVariant'].fillna('dard', inplace=True)
 df['ScanningSequence'].fillna('peeda', inplace=True)
 df['ImageType'].fillna('kasht', inplace=True)
 df['ScanOptions'].fillna('avsaad', inplace=True)
+
+
+
 
 
 def file_plane(IOP):
@@ -168,7 +188,19 @@ def add_anatomical_plane_column(df):
 
 # Assuming you have a DataFrame called 'df' containing DICOM metadata
 df = add_anatomical_plane_column(df)
-# working with local
+
+
+
+
+
+### working with local
+
+
+# Import pandas and MultiLabelBinarizer
+
+
+# Create a sample dataframe with ImageType column
+
 
 # Instantiate a MultiLabelBinarizer object
 mlb = MultiLabelBinarizer()
@@ -184,6 +216,12 @@ df.reset_index(drop=True, inplace=True)
 binary_df.reset_index(drop=True, inplace=True)
 
 df = pd.concat([df, binary_df], axis=1)
+
+
+
+
+
+
 # working for local image type
 df['ImageType'] = df['ImageType'].astype(str)
 
@@ -234,6 +272,11 @@ for idx, tokens in enumerate(tokenized_column):
                 # Remove quotation marks from the token
                 cleaned_token = token.replace("'", "").replace('"', '')
                 df.at[idx, cleaned_token] = 1
+
+
+
+
+
 # Convert 'SequenceVariant' column to uppercase
 df['SequenceVariant'] = df['SequenceVariant'].str.upper()
 
@@ -267,6 +310,9 @@ for idx, tokens in enumerate(tokenized_column):
                 # Remove quotation marks from the token
                 cleaned_token = token.replace("'", "").replace('"', '')
                 df.at[idx, cleaned_token] = 1
+
+
+
 df['PixelSpacingCO'] = df['PixelSpacing']
 df['ContrastBolusAgent'] = df['ContrastBolusAgent'].apply(lambda x: 1 if isinstance(x, str) and x.strip() else 0)
 
@@ -289,6 +335,7 @@ one_hot_encoded = pd.get_dummies(df['MRAcquisitionType'])
 df = pd.concat([df, one_hot_encoded], axis=1)
 
 
+
 def extract_pixel_spacing(string):
     """Extract the numeric part of a string representing pixel spacing."""
     match = re.search(r'\d+\.*\d*', str(string))
@@ -303,8 +350,12 @@ df['PixelSpacing'] = df['PixelSpacing'].apply(extract_pixel_spacing)
 df = df.dropna(subset=['PixelSpacing'])
 
 df['InversionTime'] = df['InversionTime'].fillna(0)
-kk = df[['SpacingBetweenSlices', 'SliceThickness']]
+kk = df[['SpacingBetweenSlices','SliceThickness']]
 df.fillna(100000, inplace=True)
+
+
+
+
 filtered_rows = [
     'ContrastBolusAgent',
     'SliceThickness', 'RepetitionTime', 'EchoTime', 'ImagingFrequency',
@@ -338,8 +389,19 @@ missing_df = pd.DataFrame(0, index=df.index, columns=missing_columns)
 
 # Concatenate the original DataFrame and the new DataFrame with missing columns
 df = pd.concat([df, missing_df], axis=1)
+
+
+# In[12]:
+
+
+
+
 # Load the trained model from the file
 clf = joblib.load('RandomForestLocal.pkl')
+
+
+
+
 final_df = df[[
     'ContrastBolusAgent',
     'SliceThickness', 'RepetitionTime', 'EchoTime', 'ImagingFrequency',
@@ -366,7 +428,15 @@ final_df = df[[
     'IFLOW_GEMS', 'SAT2', 'FSP_GEMS', 'HYPERSENSE_GEMS', 'FLEX_GEMS',
     'SAT3', 'VASCTOF_GEMS', 'EP', 'GR,', 'SE', 'SE,', 'GR', 'RM', 'EP,',
     'RM,', 'SK,', 'SP,', 'MP,', 'OSP', 'MP', 'SK']]
+
+
+
 predictions = clf.predict(final_df)
+
+
+
+
+
 from sklearn.preprocessing import LabelEncoder
 
 label_encoder = LabelEncoder()
@@ -383,6 +453,9 @@ df['Sequencename'] = original_class_names
 
 mask = (df['Sequencename'] == 'T2*') & (df['MRAcquisitionType'] == '3D')
 df.loc[mask, 'Sequencename'] = 'SWI'
+
+df['Probability'] = np.max(clf.predict_proba(final_df), axis=1)
+
 def calculate_fov(df):
     # Initialize lists to store calculated FOV values
     fov_x_values = []
@@ -458,10 +531,6 @@ def calculate_volumetric_coverage(df):
 calculate_volumetric_coverage(df)
 
 
-
-
-# Define a function to generate the sequence string based on the row values
-
 def generate_sequence(row):
     sequence = 'ADC' if row['ADC'] == 1 else row['Sequencename']
 
@@ -477,12 +546,25 @@ def generate_sequence(row):
     if row['MIP'] == 1 or row['MIN IP'] == 1 or row['MNIP'] == 1:
         sequence += '_MIP'
 
-    sequence += '_' + row['MRAcquisitionType'] + '_" + row['Anatomical Plane']
+    sequence += '_' + row['MRAcquisitionType'] + '_' + row['Anatomical Plane']
     return sequence
+
+
+# Define a function to generate the sequence string based on the row values
+
 
 
 # Apply the function to each row to create the 'sequence' column
 df['sequence'] = df.apply(generate_sequence, axis=1)
+
+
+
+# Use SUB and PERFUSION.
+# No need to worry if the name doesn't come as wanted, as a user can still adjust the name in his/her custom criteria file.
+
+
+
+
 criteria = {'B1A': {
     'PRESENCE': {'DWIAX',
                  'T1AX',
@@ -671,8 +753,19 @@ criteria = {'B1A': {
 
 }
 
-df[['SpacingBetweenSlices', 'SliceThickness']] = kk[['SpacingBetweenSlices', 'SliceThickness']]
-# Assuming you have a dataframe named 'df' with a column named 'sequence'
+
+
+
+
+
+
+
+
+
+
+# I am going to use this
+df[['SpacingBetweenSlices','SliceThickness']] = kk[['SpacingBetweenSlices','SliceThickness']]
+# Assuming you have a dataframe named 'df' with a cdolumn named 'sequence'
 groups = df.groupby("StudyInstanceUID")
 num_groups = len(groups)
 
@@ -682,9 +775,10 @@ print("Number of groups present in parent folder:", num_groups)
 i = 0
 for group_name, group_data in groups:
     print("Processing group:", group_name)
+    print("Processing study :",group_data['StudyDescription'][0])
     i = i + 1
 
-    print(group_data[['StudyDescription', 'SeriesDescription', 'sequence']])
+    #print(group_data[['StudyDescription', 'SeriesDescription', 'sequence']])
     # Ask the user if they want to go with a default protocol compliance check or custom protocol
     protocol_option = input(
         "Do you want to go with a default protocol compliance check or custom protocol? Enter 'default' or 'custom': ")
@@ -704,8 +798,11 @@ for group_name, group_data in groups:
             for sequence_name in presence:
                 if sequence_name not in sequence_names:
                     missing_sequence_names.append(sequence_name)
-            print("Missing sequence names:", missing_sequence_names)
-            print("Above sequences are present in criteria but not in study . Please check that you have written name as shown in sequence column")
+
+
+            column_name = ['sequence']
+            missing_sequence_names = pd.DataFrame(missing_sequence_names, columns= column_name)
+
             sk = -len(missing_sequence_names)
             length_range = criteria[protocol_name]['LENGTH']
             if df_length in length_range:
@@ -726,38 +823,37 @@ for group_name, group_data in groups:
                 # Use code blocks to display formatted code
                 if sequence_name in criteria.keys():
                     # Use parentheses to enclose the f-strings
-                    orientation_result = f"correct" if orientation == criteria[sequence_name][
-                        "Orientation"] else f"incorrect (expected: {criteria[sequence_name]['Orientation']})"
-                    fov_result = f"within range" if criteria[sequence_name]["FOV"][0] <= fov <= \
+                    orientation_result = 1 if orientation == criteria[sequence_name][
+                        "Orientation"] else -1
+                    fov_result = 1 if criteria[sequence_name]["FOV"][0] <= fov <= \
                                                     criteria[sequence_name]["FOV"][
-                                                        1] else f"out of range (expected: {criteria[sequence_name]['FOV']})"
-                    pixel_area_result = "less than or equal to max pixel area" if pixel_area <= criteria[sequence_name][
-                        "PixelArea"] else f"greater than max pixel area (expected: {criteria[sequence_name]['PixelArea']})"
+                                                        1] else -1
+                    pixel_area_result = 1 if pixel_area <= criteria[sequence_name][
+                        "PixelArea"] else -1
                     # Use indentation to separate the if-else blocks
                     if math.isnan(thickness):
-                        thickness_result = "Thickness is missing"
+                        thickness_result = 0
                     else:
-                        thickness_result = "less than or equal to max thickness" if thickness <= \
+                        thickness_result = 1 if thickness <= \
                                                                                     criteria[sequence_name][
-                                                                                        "Thickness"] else f"greater than max thickness (expected: {criteria[sequence_name]['Thickness']})"
+                                                                                        "Thickness"] else -1
                     if math.isnan(thickness) or math.isnan(spacing):
-                        gap_result = "Gap is missing"
+                        gap_result = 0
                     else:
-                        gap_result = "less than or equal to max gap" if gap <= criteria[sequence_name][
-                            "Gap"] else f"greater than max gap (expected: {criteria[sequence_name]['Gap']})"
+                        gap_result = 1 if gap <= criteria[sequence_name][
+                            "Gap"] else -1
                     if math.isnan(thickness) or math.isnan(spacing):
-                        coverage_result = "Coverage is missing"
+                        coverage_result = 0
                     else:
-                        coverage_result = "greater than or equal to min coverage" if coverage >= \
+                        coverage_result = 1 if coverage >= \
                                                                                      criteria[sequence_name][
-                                                                                         "Coverage"] else f"less than min coverage (expected: {criteria[sequence_name]['Coverage']})"
-
+                                                                                         "Coverage"] else -1
                     # Deduct the score by 1 if any of the results are not compliant
-                    if orientation_result.startswith("incorrect") or fov_result.startswith("out of range") or \
-                        pixel_area_result.startswith("greater than max pixel area") or \
-                        thickness_result.startswith("greater than max thickness") or \
-                        gap_result.startswith("greater than max gap") or \
-                        coverage_result.startswith("less than min coverage"):
+                    if orientation_result == -1 or fov_result == -1 or \
+                        pixel_area_result == -1 or \
+                        thickness_result == -1 or \
+                        gap_result == -1 or \
+                        coverage_result == -1:
                         score = -1
 
                     results_data.append(
@@ -769,19 +865,36 @@ for group_name, group_data in groups:
                                          columns=["Sequence", "Orientation", "FOV", "Pixel Area", "Thickness", "Gap",
                                                   "Coverage", "Score"])
 
+
+            group_data.reset_index(drop=True, inplace=True)
+            missing_sequence_names.reset_index(drop=True, inplace=True)
+
+            # Concatenate the DataFrames vertically
+            resultk = pd.concat([group_data[['SeriesDescription', 'sequence','Probability']], missing_sequence_names], axis=0, ignore_index=True)
+
+
+            result_df = pd.merge(resultk, result_df, left_on='sequence', right_on='Sequence', how='outer')
+
+            # Optionally, you can drop one of the key columns if you want to keep only one
+            result_df.drop(columns=['Sequence'], inplace=True)
+
             count_minus_1 = (result_df['Score'] == -1).sum()
+            result_df.fillna(0, inplace=True)
             print(result_df)
             final_score = 10
             final_score = final_score - count_minus_1+sk
             print(final_score, "is the study score")
             print("Number of groups remaining :", num_groups - i)
         else:
-            print(protocol_name, "is not in the criteria dictionary")
+            print( protocol_name, "is not in the criteria dictionary")
         # Count the number of series in the first group and check it with a given number
 
     # If the user chooses custom protocol, ask for their own criteria and check them accordingly
     elif protocol_option == "custom":
         # Ask for their own criteria and store them in a dictionary
+        #print("write sequence name as shown in sequence column")
+
+
         def get_input_sequence_data():
             sequence_data = {}
             sequence_data['Orientation'] = input("Enter Orientation: ")
@@ -824,6 +937,7 @@ for group_name, group_data in groups:
         df_length = len(group_data)
         sequence_names = group_data['sequence'].tolist()
         missing_sequence_names = []
+
         # Initialize an empty DataFrame to store results
         results_data = []
         data = []
@@ -832,9 +946,11 @@ for group_name, group_data in groups:
             for sequence_name in presence:
                 if sequence_name not in sequence_names:
                     missing_sequence_names.append(sequence_name)
-            print("Missing sequence names:", missing_sequence_names)
-            print(
-                "Above sequences are present in criteria but not in study . Please check that you have written name as shown in sequence column")
+
+
+            column_name = ['sequence']
+            missing_sequence_names = pd.DataFrame(missing_sequence_names, columns= column_name)
+
             sk = -len(missing_sequence_names)
             length_range = custom_criteria[protocol_name]['LENGTH']
             if df_length in length_range:
@@ -855,38 +971,37 @@ for group_name, group_data in groups:
                 # Use code blocks to display formatted code
                 if sequence_name in custom_criteria.keys():
                     # Use parentheses to enclose the f-strings
-                    orientation_result = f"correct" if orientation == custom_criteria[sequence_name][
-                        "Orientation"] else f"incorrect (expected: {custom_criteria[sequence_name]['Orientation']})"
-                    fov_result = f"within range" if custom_criteria[sequence_name]["FOV"][0] <= fov <= \
+                    orientation_result = 1 if orientation == custom_criteria[sequence_name][
+                        "Orientation"] else -1
+                    fov_result = 1 if custom_criteria[sequence_name]["FOV"][0] <= fov <= \
                                                     custom_criteria[sequence_name]["FOV"][
-                                                        1] else f"out of range (expected: {custom_criteria[sequence_name]['FOV']})"
-                    pixel_area_result = "less than or equal to max pixel area" if pixel_area <= custom_criteria[sequence_name][
-                        "PixelArea"] else f"greater than max pixel area (expected: {custom_criteria[sequence_name]['PixelArea']})"
+                                                        1] else -1
+                    pixel_area_result = 1 if pixel_area <= custom_criteria[sequence_name][
+                        "PixelArea"] else -1
                     # Use indentation to separate the if-else blocks
                     if math.isnan(thickness):
-                        thickness_result = "Thickness is missing"
+                        thickness_result = 0
                     else:
-                        thickness_result = "less than or equal to max thickness" if thickness <= \
+                        thickness_result = 1 if thickness <= \
                                                                                     custom_criteria[sequence_name][
-                                                                                        "Thickness"] else f"greater than max thickness (expected: {custom_criteria[sequence_name]['Thickness']})"
+                                                                                        "Thickness"] else -1
                     if math.isnan(thickness) or math.isnan(spacing):
-                        gap_result = "Gap is missing"
+                        gap_result = 0
                     else:
-                        gap_result = "less than or equal to max gap" if gap <= custom_criteria[sequence_name][
-                            "Gap"] else f"greater than max gap (expected: {custom_criteria[sequence_name]['Gap']})"
+                        gap_result = 1 if gap <= custom_criteria[sequence_name][
+                            "Gap"] else -1
                     if math.isnan(thickness) or math.isnan(spacing):
-                        coverage_result = "Coverage is missing"
+                        coverage_result = 0
                     else:
-                        coverage_result = "greater than or equal to min coverage" if coverage >= \
+                        coverage_result = 1 if coverage >= \
                                                                                      custom_criteria[sequence_name][
-                                                                                         "Coverage"] else f"less than min coverage (expected: {criteria[sequence_name]['Coverage']})"
-
+                                                                                         "Coverage"] else -1
                     # Deduct the score by 1 if any of the results are not compliant
-                    if orientation_result.startswith("incorrect") or fov_result.startswith("out of range") or \
-                            pixel_area_result.startswith("greater than max pixel area") or \
-                            thickness_result.startswith("greater than max thickness") or \
-                            gap_result.startswith("greater than max gap") or \
-                            coverage_result.startswith("less than min coverage"):
+                    if orientation_result == -1 or fov_result == -1 or \
+                        pixel_area_result == -1 or \
+                        thickness_result == -1 or \
+                        gap_result == -1 or \
+                        coverage_result == -1:
                         score = -1
 
                     results_data.append(
@@ -898,20 +1013,36 @@ for group_name, group_data in groups:
                                          columns=["Sequence", "Orientation", "FOV", "Pixel Area", "Thickness", "Gap",
                                                   "Coverage", "Score"])
 
-            # Print the DataFrame
+
+            group_data.reset_index(drop=True, inplace=True)
+            missing_sequence_names.reset_index(drop=True, inplace=True)
+
+            # Concatenate the DataFrames vertically
+            resultk = pd.concat([group_data[['SeriesDescription', 'sequence','Probability']], missing_sequence_names], axis=0, ignore_index=True)
+
+
+            result_df = pd.merge(resultk, result_df, left_on='sequence', right_on='Sequence', how='outer')
+
+            # Optionally, you can drop one of the key columns if you want to keep only one
+            result_df.drop(columns=['Sequence'], inplace=True)
 
             count_minus_1 = (result_df['Score'] == -1).sum()
+            result_df.fillna(0, inplace= True)
             print(result_df)
             final_score = 10
-            final_score = final_score - count_minus_1 + sk
+            final_score = final_score - count_minus_1+sk
             print(final_score, "is the study score")
             print("Number of groups remaining :", num_groups - i)
         else:
-            print(protocol_name, "is not in the criteria dictionary")
+            print( protocol_name, "is not in the criteria dictionary")
         # Count the number of series in the first group and check it with a given number
+
+
     # If the user enters an invalid option, show an error message and exit
     if protocol_option != 'custom' and protocol_option != 'default':
         print("Invalid option. Please enter 'default' or 'custom'.")
+
+
 
 print("Exiting the program.")
 exit()
