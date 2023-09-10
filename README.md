@@ -28,9 +28,13 @@ List of studies supported
 
   - Sequence weighting that can be identified:-'DWI', 'T1_MPRAGE', 'T2', 'FLAIR', 'T2*', 'T1', 'SCOUT', 'VIBE','CISS', 'TOF', 'DIR_SPACE', 'T2_SPACE', 'PERF', 'DTI', 'FGATIR','T1_FLAIR', 'MRV', 'FIESTA', 'MRA' .
 ## UserGuide
--**Installation**
-
 -**Inputs**
+1. The program expects you to give the folder path of the parent folder where studies are stored. There is no different file that should be present other than Dicom.
+2. After that, you must give input on whether you need to change the extension of files to .dcm or not.
+3. If you select custom for protocol compliance, you need to input the sequence name like
+   - weighting + FS ( if fat suppressed) + POST( if Contrast Bolus Agent used) + MPR( if applied) + MIP(if MIP used ) + 2D/3D + AX/SAG/COR(depending upon anatomical plane).
+   - Name keeping in mind the sequence column of table output.
+   
 ## Requirements
 - Python 3.9
 - NumPy version: 1.24.3
