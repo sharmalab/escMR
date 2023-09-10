@@ -35,9 +35,4 @@ List of studies supported
    - weighting + FS ( if fat suppressed) + POST( if Contrast Bolus Agent used) + MPR( if applied) + MIP(if MIP used ) + 2D/3D + AX/SAG/COR(depending upon anatomical plane).
    - Name keeping in mind the sequence column of table output.
    
-## Requirements
-- Python 3.9
-- NumPy version: 1.24.3
-- Pandas version: 2.0.2
-- scikit-learn (sklearn) version: 0.24.2
-- joblib version: 1.3.2
+
