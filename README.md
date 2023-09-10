@@ -25,7 +25,8 @@ List of studies supported
 - MRI PITUITARY SELLA W WO CONTRAST
 - MRI RAD PLANNING BRAIN
 - MRI SPECTROSCOPY
-- Sequence weighting that can be identified:-'DWI', 'T1_MPRAGE', 'T2', 'FLAIR', 'T2*', 'T1', 'SCOUT', 'VIBE','CISS', 'TOF', 'DIR_SPACE', 'T2_SPACE', 'PERF', 'DTI', 'FGATIR','T1_FLAIR', 'MRV', 'FIESTA', 'MRA' .
+
+  - Sequence weighting that can be identified:-'DWI', 'T1_MPRAGE', 'T2', 'FLAIR', 'T2*', 'T1', 'SCOUT', 'VIBE','CISS', 'TOF', 'DIR_SPACE', 'T2_SPACE', 'PERF', 'DTI', 'FGATIR','T1_FLAIR', 'MRV', 'FIESTA', 'MRA' .
 ## UserGuide
 -**Installation**
 
