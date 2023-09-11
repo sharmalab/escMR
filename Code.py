@@ -1,13 +1,9 @@
 
-
-
-
 from tqdm import tqdm
 import re
 import joblib
 import pydicom
 import os
-
 import numpy as np
 import math
 import pandas as pd
@@ -16,24 +12,12 @@ import pydicom.multival
 pd.set_option('display.max_columns', None)
 pd.options.display.max_seq_items = 1500
 pd.options.display.max_rows = 1500
-
-
 # Provide the parent folder path where DICOM files are located
-
-
-
-
-
-
 folder_path = input("Enter the folder path: ")
 change_ext = input("Do you want to change the extension of files to .dcm? Write 'Y' for yes:")
 if change_ext == 'Y'  :
-
-
     # Define a list of file names to delete
     file_names_to_delete = ["SECTRA", "DICOMDIR", "README.TXT", "CONTENT.XML"]
-
-
     def change_extension_recursive(folder_path, new_extension):
         for root, dirs, files in os.walk(folder_path):
             for file in files:
@@ -61,9 +45,7 @@ if change_ext == 'Y'  :
     # Example usage
 
     new_extension = ".dcm"  # Replace with the desired extension
-
     change_extension_recursive(folder_path, new_extension)
-
 
 def get_dicom_metadata(folder_path):
     metadata = []
@@ -112,27 +94,14 @@ def get_dicom_metadata(folder_path):
             metadata.append(row)
     return metadata
 
-
-# Prompt the user for the folder path
-
 metadata = get_dicom_metadata(folder_path)
 
 # Create a dataframe from the metadata
 df = pd.DataFrame(metadata)
-
 df = df.drop_duplicates(subset='SeriesInstanceUID')
-
-# empty_rows = df[df['SeriesDescription'].isna() | df['SeriesDescription'].isnull()]
-# df = df.drop(empty_rows.index)
-
-
 df['SeriesDescription'] = df['SeriesDescription'].str.upper()
-
 df['StudyDescription'] = df['StudyDescription'].str.upper()
 
-
-
-# Assuming 'df' is the original DataFrame containing the 'StudyDescription' column
 # Reset the index to avoid any potential issues with duplicate indices
 df.reset_index(drop=True, inplace=True)
 
@@ -142,10 +111,6 @@ df['SequenceVariant'].fillna('dard', inplace=True)
 df['ScanningSequence'].fillna('peeda', inplace=True)
 df['ImageType'].fillna('kasht', inplace=True)
 df['ScanOptions'].fillna('avsaad', inplace=True)
-
-
-
-
 
 def file_plane(IOP):
     if isinstance(IOP, str):
@@ -185,22 +150,8 @@ def add_anatomical_plane_column(df):
 
     return df_copy
 
-
 # Assuming you have a DataFrame called 'df' containing DICOM metadata
 df = add_anatomical_plane_column(df)
-
-
-
-
-
-### working with local
-
-
-# Import pandas and MultiLabelBinarizer
-
-
-# Create a sample dataframe with ImageType column
-
 
 # Instantiate a MultiLabelBinarizer object
 mlb = MultiLabelBinarizer()
@@ -217,12 +168,7 @@ binary_df.reset_index(drop=True, inplace=True)
 
 df = pd.concat([df, binary_df], axis=1)
 
-
-
-
-
-
-# working for local image type
+# working image type
 df['ImageType'] = df['ImageType'].astype(str)
 
 # Convert string representation to actual lists
@@ -273,10 +219,6 @@ for idx, tokens in enumerate(tokenized_column):
                 cleaned_token = token.replace("'", "").replace('"', '')
                 df.at[idx, cleaned_token] = 1
 
-
-
-
-
 # Convert 'SequenceVariant' column to uppercase
 df['SequenceVariant'] = df['SequenceVariant'].str.upper()
 
@@ -310,17 +252,13 @@ for idx, tokens in enumerate(tokenized_column):
                 # Remove quotation marks from the token
                 cleaned_token = token.replace("'", "").replace('"', '')
                 df.at[idx, cleaned_token] = 1
-
-
-
+#copying in PixelSpacingCO so, that can be later used in calculating FOV
 df['PixelSpacingCO'] = df['PixelSpacing']
 df['ContrastBolusAgent'] = df['ContrastBolusAgent'].apply(lambda x: 1 if isinstance(x, str) and x.strip() else 0)
-
 # If you want to replace NaN with 0 before applying the above operation, use 'fillna':
 df['ContrastBolusAgent'] = df['ContrastBolusAgent'].fillna(0).apply(lambda x: 1 if x == 1 else 0)
 
 one_hot_encoded = pd.get_dummies(df['MagneticFieldStrength'])
-
 # Concatenate the one-hot encoded DataFrame with the original DataFrame
 df = pd.concat([df, one_hot_encoded], axis=1)
 
@@ -333,9 +271,6 @@ one_hot_encoded = pd.get_dummies(df['MRAcquisitionType'])
 
 # Concatenate the one-hot encoded DataFrame with the original DataFrame
 df = pd.concat([df, one_hot_encoded], axis=1)
-
-
-
 def extract_pixel_spacing(string):
     """Extract the numeric part of a string representing pixel spacing."""
     match = re.search(r'\d+\.*\d*', str(string))
@@ -343,19 +278,16 @@ def extract_pixel_spacing(string):
         return float(match.group())
     else:
         return np.nan
-
-
+#getting first value
 df['PixelSpacing'] = df['PixelSpacing'].apply(extract_pixel_spacing)
 
 df = df.dropna(subset=['PixelSpacing'])
 
 df['InversionTime'] = df['InversionTime'].fillna(0)
+# so later while doing compliance check can check for NaN
 kk = df[['SpacingBetweenSlices','SliceThickness']]
 df.fillna(100000, inplace=True)
-
-
-
-
+# These columns should be present for RF model, it will create the required column if are not present
 filtered_rows = [
     'ContrastBolusAgent',
     'SliceThickness', 'RepetitionTime', 'EchoTime', 'ImagingFrequency',
@@ -389,18 +321,8 @@ missing_df = pd.DataFrame(0, index=df.index, columns=missing_columns)
 
 # Concatenate the original DataFrame and the new DataFrame with missing columns
 df = pd.concat([df, missing_df], axis=1)
-
-
-# In[12]:
-
-
-
-
 # Load the trained model from the file
 clf = joblib.load('RandomForestLocal.pkl')
-
-
-
 
 final_df = df[[
     'ContrastBolusAgent',
@@ -429,16 +351,9 @@ final_df = df[[
     'SAT3', 'VASCTOF_GEMS', 'EP', 'GR,', 'SE', 'SE,', 'GR', 'RM', 'EP,',
     'RM,', 'SK,', 'SP,', 'MP,', 'OSP', 'MP', 'SK']]
 
-
-
 predictions = clf.predict(final_df)
 
-
-
-
-
 from sklearn.preprocessing import LabelEncoder
-
 label_encoder = LabelEncoder()
 original_labels = ['DWI', 'T1_MPRAGE', 'T2', 'FLAIR', 'T2*', 'T1', 'SCOUT', 'VIBE',
                    'CISS', 'TOF', 'DIR_SPACE', 'T2_SPACE', 'PERF', 'DTI', 'FGATIR',
@@ -455,7 +370,10 @@ mask = (df['Sequencename'] == 'T2*') & (df['MRAcquisitionType'] == '3D')
 df.loc[mask, 'Sequencename'] = 'SWI'
 
 df['Probability'] = np.max(clf.predict_proba(final_df), axis=1)
+predicted_probabilities = clf.predict_proba(final_df)
 
+sorted_probabilities = np.sort(predicted_probabilities[: ])[:,-2]
+df['SecondHighestProbability'] = sorted_probabilities
 def calculate_fov(df):
     # Initialize lists to store calculated FOV values
     fov_x_values = []
@@ -482,12 +400,8 @@ def calculate_fov(df):
     df['FOV'] = fov
     return df
 
-
 # Call the function to calculate FOV for each row in the DataFrame
 df = calculate_fov(df)
-
-
-
 def calculate_slice_gap(df):
     if "SpacingBetweenSlices" not in df.columns or "SliceThickness" not in df.columns:
         raise ValueError("Required columns 'SpacingBetweenSlices' and 'SliceThickness' not found in DataFrame.")
@@ -499,13 +413,7 @@ def calculate_slice_gap(df):
     df["SliceGap"] = df["SpacingBetweenSlices"] - df["SliceThickness"]
     df["SliceGap"] = df["SliceGap"].abs()
     return df
-
-
 calculate_slice_gap(df)
-
-
-
-
 def calculate_pixel_area(df):
     # Calculate the width of each pixel in the y-direction
     pixel_width_y = df['FOVy'] / df['Rows']
@@ -514,11 +422,7 @@ def calculate_pixel_area(df):
     pixel_area = pixel_width_y * pixel_width_x
     df['pixel_area'] = pixel_area
     return df
-
-
 calculate_pixel_area(df)
-
-
 
 def calculate_volumetric_coverage(df):
     # Calculate the volumetric coverage by multiplying the number of slices with the spacing between slices
@@ -526,44 +430,29 @@ def calculate_volumetric_coverage(df):
 
     df['vol_cov'] = vol_cov
     return df
-
-
 calculate_volumetric_coverage(df)
-
 
 def generate_sequence(row):
     sequence = 'ADC' if row['ADC'] == 1 else row['Sequencename']
 
     if row['FS'] == 1:
-        sequence += '_FS'
+        sequence += 'FS'
 
     if row['ContrastBolusAgent'] == 1:
-        sequence += '_POST'
+        sequence += 'POST'
 
-    if row['MPR'] == 1:
-        sequence += '_MPR'
+    if row['MPR'] :
+        sequence += 'MPR'
 
     if row['MIP'] == 1 or row['MIN IP'] == 1 or row['MNIP'] == 1:
-        sequence += '_MIP'
+        sequence += 'MIP'
 
-    sequence += '_' + row['MRAcquisitionType'] + '_' + row['Anatomical Plane']
+    sequence +=row['MRAcquisitionType'] + row['Anatomical Plane']
     return sequence
-
-
-# Define a function to generate the sequence string based on the row values
-
 
 
 # Apply the function to each row to create the 'sequence' column
 df['sequence'] = df.apply(generate_sequence, axis=1)
-
-
-
-# Use SUB and PERFUSION.
-# No need to worry if the name doesn't come as wanted, as a user can still adjust the name in his/her custom criteria file.
-
-
-
 
 criteria = {'B1A': {
     'PRESENCE': {'DWIAX',
@@ -753,19 +642,8 @@ criteria = {'B1A': {
 
 }
 
-
-
-
-
-
-
-
-
-
-
-# I am going to use this
 df[['SpacingBetweenSlices','SliceThickness']] = kk[['SpacingBetweenSlices','SliceThickness']]
-# Assuming you have a dataframe named 'df' with a cdolumn named 'sequence'
+
 groups = df.groupby("StudyInstanceUID")
 num_groups = len(groups)
 
@@ -870,7 +748,7 @@ for group_name, group_data in groups:
             missing_sequence_names.reset_index(drop=True, inplace=True)
 
             # Concatenate the DataFrames vertically
-            resultk = pd.concat([group_data[['SeriesDescription', 'sequence','Probability']], missing_sequence_names], axis=0, ignore_index=True)
+            resultk = pd.concat([group_data[['SeriesDescription', 'sequence','Probability','SecondHighestProbability']], missing_sequence_names], axis=0, ignore_index=True)
 
 
             result_df = pd.merge(resultk, result_df, left_on='sequence', right_on='Sequence', how='outer')
@@ -879,7 +757,7 @@ for group_name, group_data in groups:
             result_df.drop(columns=['Sequence'], inplace=True)
 
             count_minus_1 = (result_df['Score'] == -1).sum()
-            result_df.fillna(0, inplace=True)
+            #result_df.fillna(0, inplace=True)
             print(result_df)
             final_score = 10
             final_score = final_score - count_minus_1+sk
@@ -1018,7 +896,7 @@ for group_name, group_data in groups:
             missing_sequence_names.reset_index(drop=True, inplace=True)
 
             # Concatenate the DataFrames vertically
-            resultk = pd.concat([group_data[['SeriesDescription', 'sequence','Probability']], missing_sequence_names], axis=0, ignore_index=True)
+            resultk = pd.concat([group_data[['SeriesDescription', 'sequence','Probability','SecondHighestProbability']], missing_sequence_names], axis=0, ignore_index=True)
 
 
             result_df = pd.merge(resultk, result_df, left_on='sequence', right_on='Sequence', how='outer')
