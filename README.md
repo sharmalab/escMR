@@ -30,11 +30,11 @@ List of studies supported
 ## UserGuide
 -**Installation**
 1. After downloading the package, use the cd command to navigate to the directory where your Python script is located or the directory where your project files are located:
-   cd path/to/your/project
+   -cd path/to/your/project
 2. Use the below command to install all requirements
-   pip install -r Requirements.txt
+   -pip install -r Requirements.txt
 3. Now enter the below command to run
-   python Code.py
+   -python Code.py
 
 -**Inputs**
 1. The program expects you to give the folder path of the parent folder where studies are stored. There is no different file that should be present other than Dicom.
