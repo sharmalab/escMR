@@ -758,7 +758,7 @@ for group_name, group_data in groups:
 
             # Optionally, you can drop one of the key columns if you want to keep only one
             result_df.drop(columns=['Sequence'], inplace=True)
-
+            result_df = result_df.drop_duplicates(subset=['sequence'])
             count_minus_1 = (result_df['Score'] == -1).sum()
             #result_df.fillna(0, inplace=True)
             print(result_df)
@@ -913,7 +913,7 @@ for group_name, group_data in groups:
 
             # Optionally, you can drop one of the key columns if you want to keep only one
             result_df.drop(columns=['Sequence'], inplace=True)
-
+            result_df = result_df.drop_duplicates(subset=['sequence'])
             count_minus_1 = (result_df['Score'] == -1).sum()
             result_df.fillna(0, inplace= True)
             print(result_df)
