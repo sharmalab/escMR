@@ -61,4 +61,4 @@ To use this program, you'll need to provide the following inputs:
 
 These inputs allow you to customize how the program processes and categorizes your MRI study data. Make sure to provide accurate information to ensure the desired results.
 
-
+### Python 3.9 or higher required
