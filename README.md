@@ -40,7 +40,7 @@ List of studies supported
 1. The program expects you to give the folder path of the parent folder where studies are stored. There is no different file that should be present other than Dicom.
 2. After that, you must give input on whether you need to change the extension of files to .dcm or not.
 3. If you select custom for protocol compliance, you need to input the sequence name like
-   - weighting + FS ( if fat suppressed) + POST( if Contrast Bolus Agent used) + MPR( if applied) + MIP(if MIP used ) + 2D/3D + AX/SAG/COR(depending upon anatomical plane).
+   - weighting + _FS ( if fat suppressed) + _POST( if Contrast Bolus Agent used) + _MPR( if applied) + _MIP(if MIP used ) + _2D/_3D + _AX/_SAG/_COR(depending upon anatomical plane).
    - Name keeping in mind the sequence column of table output.
    
 
