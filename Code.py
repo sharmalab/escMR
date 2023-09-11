@@ -451,20 +451,20 @@ def generate_sequence(row):
 df['sequence'] = df.apply(generate_sequence, axis=1)
 
 criteria = {'B1A': {
-    'PRESENCE': {'DWIAX',
-                 'T1AX',
-                 'SWIAX',
-                 'SWIMIPAX',
-                 'FLAIRAX',
-                 'T2*AX',
-                 'T2FSAX',
-                 'T1SAG',
-                 'ADCAX', },
+    'PRESENCE': {'DWIFS2DAX',
+                 'T12DAX',
+                 'SWI3DAX',
+                 'SWIMIP3DAX',
+                 'FLAIR2DAX',
+                 'T2*2DAX',
+                 'T2FPOST2DAX',
+                 'T12DSAG',
+                 'ADCFS2DAX', },
     'LENGTH': {8, 9}
 
 },
     'B2A': {
-        'PRESENCE': {'DWI2DAX',
+        'PRESENCE': {'DWIFS2DAX',
                      'FLAIR2DAX',
                      'T12DSAG',
                      'SWIMIP3DAX',
@@ -474,66 +474,49 @@ criteria = {'B1A': {
                      'T1POST3DSAG',
                      'SWI3DAX',
                      'SWIMIP3DAX',
-                     'ADC2DAX',
-                     'T1POST3DCOR',
-                     'T1POST3DAX'},
+                     'ADCFS2DAX',
+                     'T1MPRAGEMPR3DCOR',
+                     'T1MPRAGEMPR3DAX'},
         'LENGTH': {12, 13}
         # Add more sequences and criteria here
     },
 
     'B2B': {
-        'PRESENCE': {'DWIAX',
-                     'FLAIRAX',
-                     'T1SAG',
-                     'T2*',
-                     'T1AX',
-                     'T2FSPOSTAX',
-                     'T1POSTAX',
+        'PRESENCE': {'DWIFS2DAX',
+                     'FLAIR2DAX',
+                     'T12DSAG',
+                     'T2*2DAX',
+                     'T12DAX',
+                     'T2FSPOST2DAX',
+                     'T1POST2DAX',
                      'T1MPRAGEPOSTAX',
-                     'PERFUSIONAX',
-                     'SWIAX',
-                     'SWIMINIPAX'
-            , 'ADCAX',
-                     'T1MPRAGEMPRCOR',
-                     'T1MPRAGEMPRAX'},
+                     'PERFAX',
+                     'SWI3DAX',
+                     'SWIMIP3DAX'
+            , 'ADCFS2DAX',
+                     'T1MPRAGEMPR3DCOR',
+                     'T1MPRAGEMPR3DAX'},
         'LENGTH': {12, 13}
         # Add more sequences and criteria here
     },
-    'B2C': {
-        'PRESENCE': {'DWIAX',
-                     'FLAIRAX',
-                     'T1SAG',
-                     'T2*AX',
-                     'T1AX',
-                     'T2FSPOSTAX',
-                     'T1POSTAX',
-                     'FLAIRPOSTAX',
-                     'SWIAX',
-                     'SWIMINIPAX'
-            , 'ADCAX',
-                     'T1MPRAGEMPRCOR',
-                     'T1MPRAGEMPRAX'
-                     # Add more sequences and criteria here
-                     },
-        'LENGTH': {12, 13}
-    },
+   
 
     'B3A': {
-        'PRESENCE': {'DWIAX',
-                     'FLAIRSAG',
-                     'T1MPRAGESAG',
-                     'T2*AX',
-                     'T1AX',
-                     'T2FSPOSTAX',
-                     'T1POSTAX',
-                     'T1MPRAGEPOSTSAG',
-                     'SWIAX',
-                     'SWIMINIPAX'
-            , 'ADCAX',
-                     'T1MPRAGEMPRCOR',
-                     'T1MPRAGEMPRAX',
-                     'FLAIRMPRAX',
-                     'FLAIRMPRCOR'
+        'PRESENCE': {'DWIFS2DAX',
+                     'FLAIR3DSAG',
+                     'T1MPRAGE3DSAG',
+                     'T2*2DAX',
+                     'T12DAX',
+                     'T2FSPOST2DAX',
+                     'T1POST2DAX',
+                     'T1MPRAGEPOST3DSAG',
+                     'SWI3DAX',
+                     'SWIMIP3DAX'
+            , 'ADCFS2DAX',
+                     'T1MPRAGEMPR3DCOR',
+                     'T1MPRAGEMPR3DAX',
+                     'FLAIRMPR3DAX',
+                     'FLAIRMPR3DCOR'
 
                      # Add more sequences and criteria here
                      },
