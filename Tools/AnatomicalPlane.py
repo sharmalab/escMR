@@ -10,7 +10,7 @@ def file_plane(IOP):
     elif plane[1] == 1:
         return "COR"
     elif plane[2] == 1:
-        return "AXI"
+        return "AX"
 
 def add_anatomical_plane_column(df):
     # Create a copy of the DataFrame
