@@ -60,5 +60,12 @@ To use this program, you'll need to provide the following inputs:
    - Remember that the sequence name should match the values in the sequence column of the table output.
 
 These inputs allow you to customize how the program processes and categorizes your MRI study data. Make sure to provide accurate information to ensure the desired results.
+## Future Work
 
-### tested with Python 3.9
+In the future, you can consider the following enhancements:
+
+- **Add More Sequence Weightings:** Consider adding more sequence weightings to improve the prediction capabilities. For more information, please refer to the DeveloperGuide.md document.
+
+- **Create an Input System for Criteria Dictionary:** Develop an input system that allows the criteria dictionary to be imported using a CSV or JSON file. This enhancement can make the process of updating and managing criteria more efficient.
+
+### Tested with Python 3.9
