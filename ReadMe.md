@@ -57,8 +57,8 @@ To use this program, you'll need to provide the following inputs:
 3. **Custom Protocol Compliance (Optional)**: If you select the custom protocol compliance option, you will need to input the sequence name according to the following format:
    - **Sequence Name Format**: 
      - `weighting` + `_FS` (if fat suppressed) + `_POST` (if Contrast Bolus Agent used) + `_MPR` (if applied) + `_MIP` (if MIP used) + `_2D/_3D` + `_AX/_SAG/_COR` (depending on the anatomical plane).
-   - Keep in mind that the sequence name should match the values in the sequence column of the table output.
+   - Remember that the sequence name should match the values in the sequence column of the table output.
 
 These inputs allow you to customize how the program processes and categorizes your MRI study data. Make sure to provide accurate information to ensure the desired results.
 
-### Python 3.9 or higher required
+### tested with Python 3.9
