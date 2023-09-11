@@ -6,7 +6,7 @@ If you need to retrain the model to predict the new sequences (weightings), foll
 df = pd.read_csv(path/to/your/new/data.csv')
 Replace 'path/to/your/new/data.csv' with the actual file path.
 
-## Modify the Labelling Part of Training.py:
+### Modify the Labelling Part of Training.py:
 
 ### Edit the 'tokens_to_search' List
 
@@ -70,9 +70,77 @@ Assuming you have a DataFrame named 'df', you can use the following code to filt
 filtered_rows = df[df.apply(lambda row: any(any(target in str(cell) for target in target_strings) if isinstance(cell, str) else False for cell in row), axis=1)]
 ```
 
-This code filters rows in 'df' that contain any of the target strings.
+This code filters rows in 'df' containing any target strings.
 
 ### 'filtered_rows' Contains the Filtered Rows:
 
 The variable 'filtered_rows' now contains the rows that match your criteria.
 
+## Updating default criteria dictionary in Code.py
+
+
+The updated criteria dictionary you want to create consists of two parts: the criteria for sequences ('PRESENCE' and 'LENGTH') and the details for specific sequence protocols (eg 'DWIFS2DAX','T1POST2DSAG','T1POST3DSAG' etc). Instructions for naming sequences are present in README.md
+Let's break it down step by step:
+
+### 1. Define Criteria for Sequences
+
+Start by specifying the criteria for protocol. These criteria include sequences that need to be present ('PRESENCE') and the acceptable length range ('LENGTH') for those sequences.
+
+```python
+# Example
+criteria = {'PROTOCOLNAME': {
+    'PRESENCE': {'DWI2DAX', 'FLAIR2DAX','T12DSAG','SWIMIP3DAX','T12DAX','SEQUENCENAME'},
+    'LENGTH': {X, Y}
+}}
+```
+- `'PRESENCE'` lists the sequences that should be present in this protocol.
+- `'LENGTH'` specifies the acceptable range of sequence lengths.
+
+### 2. Define Specific Sequence Protocols
+
+Now, let's define the details for specific sequence of protocols. Each sequence should include orientation, FOV, pixel area, thickness, gap, and coverage.
+
+#### For eg 'SEQUENCENAME':
+
+```python
+'SEQUENCENAME': {
+    'Orientation': '2D',
+    'FOV': [140, 180],
+    'PixelArea': 0.6,
+    'Thickness': 3,
+    'Gap': 0.5,
+    'Coverage': 50
+}
+```
+
+- `'Orientation'`: Specify whether it's a '2D' or '3D' sequence.
+- `'FOV'`: Define the FOV range as a list with two values.
+- `'PixelArea'`: Provide the pixel area as a floating-point value.
+- `'Thickness'`: Enter the thickness as a floating-point value.
+- `'Gap'`: Set the gap value as a floating-point number.
+- `'Coverage'`: Specify the coverage as a floating-point value.
+
+### Combine the criteria for sequences and the details for specific sequence protocols in the criteria dictionary :
+
+```python
+criteria = {
+    'PROTOCOLNAME': {
+        'PRESENCE': {'DWIFS2DAX', 'T12DAX', 'SEQUENCENAME'},
+        'LENGTH': {X, Y}
+    },
+    'SEQUENCENAME': {
+        'Orientation': '2D',
+        'FOV': [140, 180],
+        'PixelArea': 0.6,
+        'Thickness': 3,
+        'Gap': 0.5,
+        'Coverage': 50
+    },
+.
+.
+.
+```
+
+Repeat this structure for each specific protocol you want to include in your criteria dictionary.
+
+---
