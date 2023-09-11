@@ -67,5 +67,5 @@ In the future, you can consider the following enhancements:
 - **Add More Sequence Weightings:** Consider adding more sequence weightings to improve the prediction capabilities. For more information, please refer to the DeveloperGuide.md document.
 
 - **Create an Input System for Criteria Dictionary:** Develop an input system that allows the criteria dictionary to be imported using a CSV or JSON file. This enhancement can make the process of updating and managing criteria more efficient.
-
+- **Add More Protocols in Default Criteria:** For more information, please refer to the DeveloperGuide.md document's protocol addition section
 ### Tested with Python 3.9
