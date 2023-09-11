@@ -1,5 +1,12 @@
+## **Retraining the Model with New Sequences**
 
-## Labelling
+If you need to retrain the model to predict the new sequences (weightings), follow these steps:
+### Change the path  to CSV file accordingly:
+
+df = pd.read_csv(path/to/your/new/data.csv')
+Replace 'path/to/your/new/data.csv' with the actual file path.
+
+## Modify the Labelling Part of Training.py:
 
 ### Edit the 'tokens_to_search' List
 
@@ -42,9 +49,6 @@ If you want to modify the given code to filter rows containing specific target s
    ```python
    target_strings = ['DWI', 'T2', 'FLAIR', 'T2*', 'T1', 'SCOUT', 'VIBE', 'CISS', 'TOF', 'DIR_SPACE', 'T2_SPACE', 'PERF', 'DTI', 'FGATIR', 'T1_FLAIR', 'MRV', 'FIESTA', 'T1_MPRAGE', 'MRA', .....]
 
-Certainly! Here are the instructions to modify the provided code in Markdown format:
-
-markdown
 
 ### Modifying Code to Filter Rows with Target Strings
 
@@ -56,7 +60,7 @@ If you want to modify the given code to filter rows containing specific target s
 
    ```python
    target_strings = ['DWI', 'T2', 'FLAIR', 'T2*', 'T1', 'SCOUT', 'VIBE', 'CISS', 'TOF', 'DIR_SPACE', 'T2_SPACE', 'PERF', 'DTI', 'FGATIR', 'T1_FLAIR', 'MRV', 'FIESTA', 'T1_MPRAGE', 'MRA']
-Here are the instructions in GitHub Markdown format:
+
 
 ### Modify Your DataFrame (Assumed as 'df'):
 
