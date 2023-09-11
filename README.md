@@ -47,7 +47,7 @@ Supported sequence weighting:
     python Code.py
     ```
 
--**Inputs**
+**Inputs**
 1. The program expects you to give the folder path of the parent folder where studies are stored. There is no different file that should be present other than Dicom.
 2. After that, you must give input on whether you need to change the extension of files to .dcm or not.
 3. If you select custom for protocol compliance, you need to input the sequence name like
