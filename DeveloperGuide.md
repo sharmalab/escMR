@@ -31,7 +31,7 @@ strings_to_delete = []
 
 
 ---
-## Modifying Code to Filter Rows with Target Strings
+### Modifying Code to Filter Rows with Target Strings
 
 If you want to modify the given code to filter rows containing specific target strings in a DataFrame, follow these steps:
 
@@ -46,7 +46,7 @@ Certainly! Here are the instructions to modify the provided code in Markdown for
 
 markdown
 
-## Modifying Code to Filter Rows with Target Strings
+### Modifying Code to Filter Rows with Target Strings
 
 If you want to modify the given code to filter rows containing specific target strings in a DataFrame, follow these steps:
 
