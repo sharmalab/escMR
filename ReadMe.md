@@ -46,7 +46,7 @@ Supported sequence weighting:
     ```bash
     python Code.py
     ```
-## Inputs
+### Inputs
 
 To use this program, you'll need to provide the following inputs:
 
