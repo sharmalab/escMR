@@ -522,7 +522,7 @@ criteria = {'B1A': {
                      },
         'LENGTH': {13, 14}
     },
-    'DWI2DAX': {
+    'DWIFS2DAX': {
         'Orientation': '2D',
         'FOV': [220, 250],
         'PixelArea': 3,
