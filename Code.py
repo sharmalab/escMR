@@ -164,7 +164,7 @@ binary_df.reset_index(drop=True, inplace=True)
 
 df = pd.concat([df, binary_df], axis=1)
 
-# working image type
+
 df['ImageType'] = df['ImageType'].astype(str)
 
 # Convert string representation to actual lists
