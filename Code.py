@@ -683,7 +683,14 @@ for group_name, group_data in groups:
                 print("Dataframe length is within range:", df_length)
             else:
                 print("Dataframe length is out of range:", df_length, "instead of", length_range)
+            duplicate_sequences = group_data[group_data.duplicated(subset='sequence', keep=False)]
 
+            # Get the list of duplicate strings
+            duplicate_sequence_list = duplicate_sequences['sequence'].tolist()
+
+            # Print the list of duplicate strings
+            print("List of Duplicate sequences in study:")
+            print(duplicate_sequence_list)
             for index, row in group_data.iterrows():
                 sequence_name = row["sequence"]
                 orientation = row["MRAcquisitionType"]
@@ -831,7 +838,14 @@ for group_name, group_data in groups:
                 print("Dataframe length is within range:", df_length)
             else:
                 print("Dataframe length is out of range:", df_length, "instead of", length_range)
+            duplicate_sequences = group_data[group_data.duplicated(subset='sequence', keep=False)]
 
+            # Get the list of duplicate strings
+            duplicate_sequence_list = duplicate_sequences['sequence'].tolist()
+
+            # Print the list of duplicate strings
+            print("List of Duplicate sequences in study:")
+            print(duplicate_sequence_list)
             for index, row in group_data.iterrows():
                 sequence_name = row["sequence"]
                 orientation = row["MRAcquisitionType"]
