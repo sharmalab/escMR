@@ -1,4 +1,3 @@
-
 from tqdm import tqdm
 import re
 import joblib
@@ -40,10 +39,7 @@ if change_ext == 'Y'  :
                     except pydicom.errors.InvalidDicomError:
                         # If the file is not a valid DICOM file, do nothing
                         pass
-
-
-    # Example usage
-
+                        
     new_extension = ".dcm"  # Replace with the desired extension
     change_extension_recursive(folder_path, new_extension)
 
