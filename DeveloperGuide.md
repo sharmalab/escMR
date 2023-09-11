@@ -31,5 +31,44 @@ strings_to_delete = []
 
 
 ---
+## Modifying Code to Filter Rows with Target Strings
 
-These instructions are presented in a clear and organized format for your README file.
+If you want to modify the given code to filter rows containing specific target strings in a DataFrame, follow these steps:
+
+1. **Define Your List of Target Strings:**
+
+   Begin by creating a list of strings that you want to use as target strings. For example, you can have a list like this:
+
+   ```python
+   target_strings = ['DWI', 'T2', 'FLAIR', 'T2*', 'T1', 'SCOUT', 'VIBE', 'CISS', 'TOF', 'DIR_SPACE', 'T2_SPACE', 'PERF', 'DTI', 'FGATIR', 'T1_FLAIR', 'MRV', 'FIESTA', 'T1_MPRAGE', 'MRA', .....]
+
+Certainly! Here are the instructions to modify the provided code in Markdown format:
+
+markdown
+
+## Modifying Code to Filter Rows with Target Strings
+
+If you want to modify the given code to filter rows containing specific target strings in a DataFrame, follow these steps:
+
+1. **Define Your List of Target Strings:**
+
+   Begin by creating a list of strings that you want to use as target strings. For example, you can have a list like this:
+
+   ```python
+   target_strings = ['DWI', 'T2', 'FLAIR', 'T2*', 'T1', 'SCOUT', 'VIBE', 'CISS', 'TOF', 'DIR_SPACE', 'T2_SPACE', 'PERF', 'DTI', 'FGATIR', 'T1_FLAIR', 'MRV', 'FIESTA', 'T1_MPRAGE', 'MRA']
+Here are the instructions in GitHub Markdown format:
+
+### Modify Your DataFrame (Assumed as 'df'):
+
+Assuming you have a DataFrame named 'df', you can use the following code to filter rows based on your target strings:
+
+```python
+filtered_rows = df[df.apply(lambda row: any(any(target in str(cell) for target in target_strings) if isinstance(cell, str) else False for cell in row), axis=1)]
+```
+
+This code filters rows in 'df' that contain any of the target strings.
+
+### 'filtered_rows' Contains the Filtered Rows:
+
+The variable 'filtered_rows' now contains the rows that match your criteria.
+
