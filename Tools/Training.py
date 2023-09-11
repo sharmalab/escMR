@@ -38,6 +38,7 @@ df['ProtocolName'] = df['ProtocolName'].str.upper()
 
 # List of study descriptions to exclude
 #remove the study description from below list if you want to train on that study also
+
 excluded_study_descriptions = [
 
     "MRA NECK W  WO CONTRAST",
@@ -461,7 +462,7 @@ df['ScanningSequence'].fillna('peeda', inplace=True)
 df['ImageType'].fillna('kasht', inplace=True)
 df['ScanOptions'].fillna('avsaad',inplace = True)
 
-# working for large data
+
 unique_values = df['ImageType'].unique()
 
 # Create binary features based on unique values
@@ -473,7 +474,7 @@ for value in unique_values:
         df[feature] = df['ImageType'].apply(lambda x: int(feature in x))
 
 
-# working for large data
+
 unique_values = df['ScanOptions'].unique()
 
 # Create binary features based on unique values
@@ -484,10 +485,9 @@ for value in unique_values:
         feature = feature.strip()
         df[feature] = df['ScanOptions'].apply(lambda x: int(feature in x))
 
-# Convert 'ImageType' column to uppercase
+
 df['SequenceVariant'] = df['SequenceVariant'].str.upper()
 
-# Tokenize the 'ImageType' column
 selected_column = df['SequenceVariant']
 tokenized_column = selected_column.str.split(r'[\s()\[\]]+')
 
@@ -519,10 +519,9 @@ for idx, tokens in enumerate(tokenized_column):
                 df.at[idx, cleaned_token] = 1
 
 
-# Convert 'ImageType' column to uppercase
 df['ScanningSequence'] = df['ScanningSequence'].str.upper()
 
-# Tokenize the 'ImageType' column
+
 selected_column = df['ScanningSequence']
 tokenized_column = selected_column.str.split(r'[\s()\[\]]+')
 
