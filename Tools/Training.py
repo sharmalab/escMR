@@ -167,7 +167,7 @@ for idx in tqdm(range(len(df)), total=len(df), desc="Processing Rows"):
     # Print debug information about the current row being processed
     print(f"Processing row {idx + 1}/{len(df)}")
 
-    # Check if the current index is within the range [2250, 3350]
+    
 
     # Retrieve matching tokens
     matching_tokens = [token for token in df.loc[idx, 'tokenized column'] if token in tokens_to_search]
@@ -648,8 +648,8 @@ rf_model = RandomForestClassifier()
 
 # Define the hyperparameter grid for tuning
 param_grid = {
-    'n_estimators': [300],
-    'max_depth': [50],
+    'n_estimators': [50,100,300],
+    'max_depth': [50,30],
 
     'criterion': ['entropy']
     # Add more hyperparameters you want to tune
