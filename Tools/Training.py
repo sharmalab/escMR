@@ -641,7 +641,7 @@ label_encoder = LabelEncoder()
 y_encoded = label_encoder.fit_transform(y)
 
 # Split the data into training and testing sets
-X_train, X_test, y_train_encoded, y_test_encoded = train_test_split(x_train, y_encoded, test_size=0.2, random_state=42)
+X_train, X_test, y_train_encoded, y_test_encoded = StratifiedShuffleSplit(x_train, y_encoded, test_size=0.2, random_state=42)
 
 # Create the RandomForestClassifier
 rf_model = RandomForestClassifier()
